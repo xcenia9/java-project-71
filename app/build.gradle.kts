@@ -19,6 +19,7 @@ application { mainClass.set("hexlet.code.App") }
 repositories { mavenCentral() }
 
 dependencies {
+    implementation("info.picocli:picocli:4.7.6")
     implementation("org.apache.commons:commons-lang3:3.17.0")
     implementation("org.apache.commons:commons-collections4:4.5.0-M3")
     testImplementation(platform("org.junit:junit-bom:5.12.0-RC2Ю."))
