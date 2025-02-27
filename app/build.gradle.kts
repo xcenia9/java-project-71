@@ -24,6 +24,7 @@ dependencies {
     implementation("org.apache.commons:commons-collections4:4.5.0-M3")
     testImplementation(platform("org.junit:junit-bom:5.12.0-RC2Ю."))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.4.2")
 }
 
 tasks.test {
