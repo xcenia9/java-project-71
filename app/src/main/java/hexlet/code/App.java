@@ -18,8 +18,7 @@ import java.util.Map;
         version = "gendiff 1.0",
         description = "Compares two configuration files and shows a difference."
 )
-
- class App implements Runnable {
+public class App implements Runnable {
     @Option(names = { "-h", "--help" }, usageHelp = true, description = "Show this help message and exit")
     private boolean helpRequested = false;
 
@@ -73,6 +72,7 @@ import java.util.Map;
         String content = new String(Files.readAllBytes(fullPath));
         return parse(content);
     }
+
     public Map<String, Object> parse(String content) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(content, Map.class);
