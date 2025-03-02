@@ -5,6 +5,6 @@
 
 [![Test Coverage](https://api.codeclimate.com/v1/badges/7acc7ddba1141e0c7167/test_coverage)](https://codeclimate.com/github/xcenia9/java-project-71/test_coverage)
 
-![Java CI](https://github.com/xcenia9/java-project-71/actions/workflows/main.yml/badge.svg)
+![Java CI](https://github.com/hexlet-boilerplates/java-package/actions/workflows/main.yml/badge.svg)
 
 [![asciicast](https://asciinema.org/a/F4Ao5TFRcqbYoKV42V1ZEaJ56.svg)](https://asciinema.org/a/F4Ao5TFRcqbYoKV42V1ZEaJ56)
