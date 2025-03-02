@@ -44,3 +44,4 @@ bin/
 
 # Ignore Gradle build output directory
 /demo.cast
+/build/
