@@ -1,6 +1,8 @@
 package hexlet.code.utils;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Differ {
     public static String generate(Map<String, Object> data1, Map<String, Object> data2) {
