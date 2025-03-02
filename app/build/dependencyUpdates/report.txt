@@ -3,23 +3,20 @@
 : Project Dependency Updates (report to plain text file)
 ------------------------------------------------------------
 
-The following dependencies are using the latest milestone version:
+The following dependencies are using the latest release version:
+ - com.fasterxml.jackson.core:jackson-databind:2.18.3
  - com.github.ben-manes.versions:com.github.ben-manes.versions.gradle.plugin:0.52.0
  - com.github.johnrengelman.shadow:com.github.johnrengelman.shadow.gradle.plugin:8.1.1
  - com.puppycrawl.tools:checkstyle:9.3
- - io.freefair.lombok:io.freefair.lombok.gradle.plugin:8.12.1
+ - info.picocli:picocli:4.7.6
+ - io.freefair.lombok:io.freefair.lombok.gradle.plugin:8.12.2
  - org.apache.commons:commons-collections4:4.5.0-M3
  - org.apache.commons:commons-lang3:3.17.0
  - org.jacoco:org.jacoco.agent:0.8.12
  - org.jacoco:org.jacoco.ant:0.8.12
+ - org.junit:junit-bom:5.12.0
+ - org.junit.jupiter:junit-jupiter:5.12.0
  - org.projectlombok:lombok:1.18.36
 
-The following dependencies have later milestone versions:
- - org.junit:junit-bom [5.12.0-RC2Ю. -> 5.12.0]
-     https://junit.org/junit5/
-
-Failed to compare versions for the following dependencies because they were declared without version:
- - org.junit.jupiter:junit-jupiter
-
 Gradle release-candidate updates:
- - Gradle: [8.10 -> 8.12.1 -> 8.13-rc-2]
+ - Gradle: [8.10 -> 8.13]
