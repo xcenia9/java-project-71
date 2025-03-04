@@ -19,7 +19,12 @@ public class Differ {
         result.append("}");
         return result.toString();
     }
-    public static void appendStringBuilder(StringBuilder result, String key, Optional<Object> value1, Optional<Object> value2) {
+    public static void appendStringBuilder(
+                StringBuilder result,
+                String key,
+                Optional<Object> value1,
+                Optional<Object> value2
+    ) {
         if (value1.isPresent() && value2.isPresent()) {
             appendBothKeys(result, key, value1.get(), value2.get());
         } else if (value1.isPresent()) {
