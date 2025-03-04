@@ -52,7 +52,6 @@ public class App implements Callable<Integer> {
         }
         if (filepath1 == null || filepath2 == null) {
             System.out.println("Hello, World!");
-            return 0;
         } else {
             try {
                 Map<String, Object> data1 = getData(filepath1);
@@ -71,7 +70,7 @@ public class App implements Callable<Integer> {
         Path fullPath = Paths.get(filepath);
         if (Files.notExists(fullPath)) {
             Path currentDirectory = Paths.get(System.getProperty("user.dir"));
-            Path relativePath = currentDirectory.resolve("src/main/java/hexlet/code/files").resolve(filepath);
+            Path relativePath = currentDirectory.resolve("src/main/resources/files").resolve(filepath);
             if (Files.exists(relativePath)) {
                 fullPath = relativePath;
             }
