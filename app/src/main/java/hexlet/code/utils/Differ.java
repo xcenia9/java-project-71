@@ -1,6 +1,7 @@
 package hexlet.code.utils;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -11,20 +12,22 @@ public class Differ {
 
         StringBuilder result = new StringBuilder("{\n");
         for (var key : allKeys) {
-            Object value1 = data1.get(key);
-            Object value2 = data2.get(key);
-            if (!data1.containsKey(key)) {
-                result.append("+ ").append(key).append((": ")).append(value2).append("\n");
-            } else if (!data2.containsKey(key)) {
-                result.append("- ").append(key).append(": ").append(value1).append("\n");
-            } else if (!value1.equals(value2)) {
-                result.append(("- ")).append(key).append((": ")).append(value1).append("\n")
-                        .append("+ ").append(key).append((": ")).append((value2)).append("\n");
-            } else {
-                result.append("  ").append(key).append((": ")).append(value1).append(("\n"));
-            }
+            appendStringBuilder(result, key, data1.get(key), data2.get(key));
         }
         result.append("}");
         return result.toString();
+    }
+
+    public static void appendStringBuilder(StringBuilder result, String key, Object value1, Object value2) {
+        if (value1 == null && value2 != null) {
+            result.append("+ ").append(key).append((": ")).append(value2).append("\n");
+        } else if (value1 != null && value2 == null) {
+            result.append("- ").append(key).append(": ").append(value1).append("\n");
+        } else if (!Objects.equals(value1, value2)) {
+            result.append(("- ")).append(key).append((": ")).append(value1).append("\n")
+                    .append("+ ").append(key).append((": ")).append((value2)).append("\n");
+        } else {
+            result.append("  ").append(key).append((": ")).append(value1).append(("\n"));
+        }
     }
 }
