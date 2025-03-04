@@ -1,8 +1,5 @@
 .DEFAULT_GOAL := build-run
 
-setup:
-	./gradlew wrapper --gradle-version 8.10
-
 clean:
 	./gradlew clean
 
@@ -29,7 +26,6 @@ lint:
 
 check-deps:
 	./gradlew dependencyUpdates -Drevision=release
-
 
 build-run: build run
 
