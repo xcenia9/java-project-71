@@ -6,11 +6,14 @@ import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine;
+import picocli.CommandLine.Model.CommandSpec;
+import picocli.CommandLine.Spec;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 @Command(
         name = "gendiff",
@@ -18,7 +21,10 @@ import java.util.Map;
         version = "gendiff 1.0",
         description = "Compares two configuration files and shows a difference."
 )
-public class App implements Runnable {
+public class App implements Callable<Integer> {
+    @Spec
+    private CommandSpec spec;
+
     @Option(names = { "-h", "--help" }, usageHelp = true, description = "Show this help message and exit")
     private boolean helpRequested = false;
 
@@ -34,20 +40,19 @@ public class App implements Runnable {
     @Parameters(index = "1", arity = "0..1", description = "path to second file")
     private String filepath2;
 
-    public static void main(String[] args) {
-        CommandLine.run(new App(), args);
-    }
-
     @Override
-    public void run() {
+    public Integer call() {
         if (helpRequested) {
-            return;
+            spec.commandLine().usage(spec.commandLine().getOut());
+            return 0;
         }
         if (versionInfoRequested) {
-            return;
+            spec.commandLine().printVersionHelp(spec.commandLine().getOut());
+            return 0;
         }
         if (filepath1 == null || filepath2 == null) {
             System.out.println("Hello, World!");
+            return 0;
         } else {
             try {
                 Map<String, Object> data1 = getData(filepath1);
@@ -56,8 +61,10 @@ public class App implements Runnable {
                 System.out.println(diffResult);
             } catch (Exception e) {
                 System.err.println("Error processing files: " + e.getMessage());
+                return 1;
             }
         }
+        return 0;
     }
 
     public Map<String, Object> getData(String filepath) throws Exception {
@@ -76,5 +83,10 @@ public class App implements Runnable {
     public Map<String, Object> parse(String content) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(content, Map.class);
+    }
+
+    public static void main(String[] args) {
+        int exitCode = new CommandLine(new App()).execute(args);
+        System.exit(exitCode);
     }
 }
