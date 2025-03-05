@@ -54,16 +54,13 @@ public class App implements Callable<Integer> {
             System.out.println("Hello, World!");
         } else {
             try {
-                Map<String, Object> data1 = getData(filepath1);
-                Map<String, Object> data2 = getData(filepath2);
-                String diffResult = Differ.generate(data1, data2);
+                String diffResult = Differ.generate(getData(filepath1), getData(filepath2));
                 System.out.println(diffResult);
             } catch (Exception e) {
                 System.err.println("Error processing files: " + e.getMessage());
                 return 1;
             }
-        }
-        return 0;
+        } return 0;
     }
 
     public Map<String, Object> getData(String filepath) throws Exception {
