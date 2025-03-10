@@ -1,11 +1,14 @@
 package hexlet.code;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import hexlet.code.utils.Differ;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine;
+import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Spec;
 
@@ -44,26 +47,29 @@ public class App implements Callable<Integer> {
     public Integer call() {
         if (helpRequested) {
             spec.commandLine().usage(spec.commandLine().getOut());
-            return 0;
+            return ExitCode.OK;
         }
         if (versionInfoRequested) {
             spec.commandLine().printVersionHelp(spec.commandLine().getOut());
-            return 0;
+            return ExitCode.OK;
         }
         if (filepath1 == null || filepath2 == null) {
             System.out.println("Hello, World!");
         } else {
             try {
-                String diffResult = Differ.generate(getData(filepath1), getData(filepath2));
+                Map<String, Object> data1 = getData(filepath1);
+                Map<String, Object> data2 = getData(filepath2);
+                String diffResult = Differ.generate(data1, data2);
                 System.out.println(diffResult);
             } catch (Exception e) {
                 System.err.println("Error processing files: " + e.getMessage());
-                return 1;
+                return ExitCode.SOFTWARE;
             }
-        } return 0;
+        }
+        return ExitCode.OK;
     }
 
-    public Map<String, Object> getData(String filepath) throws Exception {
+    public static Map<String, Object> getData(String filepath) throws Exception {
         Path fullPath = Paths.get(filepath);
         if (Files.notExists(fullPath)) {
             Path currentDirectory = Paths.get(System.getProperty("user.dir"));
@@ -76,9 +82,14 @@ public class App implements Callable<Integer> {
         return parse(content);
     }
 
-    public Map<String, Object> parse(String content) throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(content, Map.class);
+    public static Map<String, Object> parse(String content) throws Exception {
+        ObjectMapper jsonObjectMapper = new ObjectMapper();
+        try {
+            return jsonObjectMapper.readValue(content, Map.class);
+        } catch (JsonParseException e) {
+            ObjectMapper yamlObjectMapper = new ObjectMapper(new YAMLFactory());
+            return yamlObjectMapper.readValue(content, Map.class);
+        }
     }
 
     public static void main(String[] args) {
