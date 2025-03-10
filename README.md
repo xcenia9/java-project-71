@@ -8,3 +8,7 @@
 ![Java CI](https://github.com/hexlet-boilerplates/java-package/actions/workflows/main.yml/badge.svg)
 
 [![asciicast](https://asciinema.org/a/F4Ao5TFRcqbYoKV42V1ZEaJ56.svg)](https://asciinema.org/a/F4Ao5TFRcqbYoKV42V1ZEaJ56)
+
+[![asciicast](https://asciinema.org/a/JbhsnRNT2En9kxEGi50okUv1s.svg)](https://asciinema.org/a/JbhsnRNT2En9kxEGi50okUv1s)
+
+
