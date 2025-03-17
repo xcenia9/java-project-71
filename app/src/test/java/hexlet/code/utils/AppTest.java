@@ -1,71 +1,125 @@
 package hexlet.code.utils;
 
-
-import hexlet.code.App;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AppTest {
-    private Map<String, Object> testData1;
-    private Map<String, Object> testData2;
-    private String resultTest;
-
-    @BeforeEach
-    public void beforeEach() {
-        testData1 = new HashMap<>();
-        testData1.put("key1", "value1");
-        testData1.put("key2", "value2");
-        testData1.put("key", "value");
-
-        testData2 = new HashMap<>();
-        testData2.put("key3", "value3");
-        testData2.put("key1", "value4");
-        testData2.put("key", "value");
-
-        resultTest = "{\n  key: value\n- key1: value1\n+ key1: value4\n- key2: value2\n+ key3: value3\n}";
-    }
-    @Test
-    public void generateTestNotNul() {
-        String result = Differ.generate(testData1, testData2);
-        assertNotNull(result);
-    }
-    @Test
-    public void generateTestEqualsResult() {
-        String result = Differ.generate(testData1, testData2);
-        assertEquals(resultTest, result);
-    }
-
-    @Test
-    public void generateEmptyData() {
-        Map<String, Object> notData1 = new HashMap<>();
-        Map<String, Object> notData2 = new HashMap<>();
-        String emptyResultTest = "{\n}";
-        var emptyResult = Differ.generate(notData1, notData2);
-        assertEquals(emptyResultTest, emptyResult);
-    }
-    @Test
-    public void testGetDataNotNull() throws Exception {
-        assertNotNull(App.getData("filepath1.yml"));
-    }
-    @Test
-    public void testFullPath() throws Exception {
-        assertEquals(App.getData("src/main/resources/files/filepath2.yml"), App.getData("filepath2.yml"));
-    }
     @Test
     public void testParseJson() throws Exception {
-        String jsonContent = "{\"key\": \"value\"}";
-        Map<String, Object> result = App.parse(jsonContent);
-        assertEquals("value", result.get("key"));
+        String jsonContent = "{\"key1\": \"value1\", \"key2\": 2}";
+        Map<String, Object> result = Parser.parse(jsonContent);
+        assertEquals("value1", result.get("key1"));
+        assertEquals(2, result.get("key2"));
     }
+
     @Test
     public void testParseYaml() throws Exception {
-        String yamlContent = "key: value";
-        Map<String, Object> result = App.parse(yamlContent);
-        assertEquals("value", result.get("key"));
+        String yamlContent = "key1: value1\nkey2: 2";
+        Map<String, Object> result = Parser.parse(yamlContent);
+        assertEquals("value1", result.get("key1"));
+        assertEquals(2, result.get("key2"));
     }
+
+    @Test
+    public void testGetDataJsonFile() throws Exception {
+        Map<String, Object> result = Parser.getData("test.json");
+        assertEquals("value1", result.get("key1"));
+        assertEquals(2, result.get("key2"));
+    }
+
+    @Test
+    public void testGetDataYamlFile() throws Exception {
+        Map<String, Object> result = Parser.getData("test.yaml");
+        assertEquals("value1", result.get("key1"));
+        assertEquals(2, result.get("key2"));
+    }
+
+    @Test
+    public void testFormatDifferentValues() {
+        Map<String, Object> data1 = new HashMap<>();
+        data1.put("key1", "value1");
+        data1.put("key2", 2);
+        Map<String, Object> data2 = new HashMap<>();
+        data2.put("key1", "value2");
+        data2.put("key2", 2);
+        String expected = "{\n" +
+                "- key1: value1\n" +
+                "+ key1: value2\n" +
+                "  key2: 2\n" +
+                "}";
+        String result = Stylish.format(data1, data2);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testFormatSameValues() {
+        Map<String, Object> data1 = new HashMap<>();
+        data1.put("key1", "value1");
+        data1.put("key2", 2);
+        Map<String, Object> data2 = new HashMap<>();
+        data2.put("key1", "value1");
+        data2.put("key2", 2);
+        String expected = "{\n" +
+                "  key1: value1\n" +
+                "  key2: 2\n" +
+                "}";
+        String result = Stylish.format(data1, data2);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testFormatOnlyInFirstMap() {
+        Map<String, Object> data1 = new HashMap<>();
+        data1.put("key1", "value1");
+        Map<String, Object> data2 = new HashMap<>();
+        String expected = "{\n" +
+                "- key1: value1\n" +
+                "}";
+        String result = Stylish.format(data1, data2);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testFormatOnlyInSecondMap() {
+        Map<String, Object> data1 = new HashMap<>();
+        Map<String, Object> data2 = new HashMap<>();
+        data2.put("key2", "value2");
+        String expected = "{\n" +
+                "+ key2: value2\n" +
+                "}";
+        String result = Stylish.format(data1, data2);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testGenerateStylish() {
+        Map<String, Object> data1 = new HashMap<>();
+        data1.put("key1", "value1");
+        data1.put("key2", 2);
+        Map<String, Object> data2 = new HashMap<>();
+        data2.put("key1", "value2");
+        data2.put("key2", 2);
+        String expected = "{\n" +
+                "- key1: value1\n" +
+                "+ key1: value2\n" +
+                "  key2: 2\n" +
+                "}";
+        String result = Differ.generate(data1, data2, "stylish");
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testGenerateUnsupportedFormat() {
+        Map<String, Object> data1 = new HashMap<>();
+        Map<String, Object> data2 = new HashMap<>();
+        Exception exception = assertThrows(UnsupportedOperationException.class, () -> {
+            Differ.generate(data1, data2, "unsupported_format");
+        });
+        assertEquals("Unsupported format: unsupported_format", exception.getMessage());
+    }
+
 }
+
