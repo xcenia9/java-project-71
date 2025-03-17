@@ -1,7 +1,6 @@
 package hexlet.code;
 
-import hexlet.code.utils.Differ;
-import hexlet.code.utils.Parser;
+import hexlet.code.utils.FileReader;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -44,8 +43,8 @@ public class App implements Callable<Integer> {
             System.out.println("Hello, World!");
         } else {
             try {
-                Map<String, Object> data1 = Parser.getData(filepath1);
-                Map<String, Object> data2 = Parser.getData(filepath2);
+                Map<String, Object> data1 = FileReader.getData(filepath1);
+                Map<String, Object> data2 = FileReader.getData(filepath2);
                 String diffResult = Differ.generate(data1, data2, format);
                 System.out.println(diffResult);
             } catch (Exception e) {
