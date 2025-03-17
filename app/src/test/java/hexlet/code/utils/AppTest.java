@@ -1,6 +1,7 @@
 package hexlet.code.utils;
 
 import hexlet.code.Differ;
+import hexlet.code.formatters.Json;
 import hexlet.code.formatters.Stylish;
 import org.junit.jupiter.api.Test;
 import java.util.HashMap;
@@ -126,6 +127,21 @@ public class AppTest {
 
         assertEquals(expected, result);
     }
+
+    @Test
+    public void testJsonFormatting() {
+        Map<String, Object> data1 = new HashMap<>();
+        data1.put("key1", "value1");
+        data1.put("key2", 2);
+        Map<String, Object> data2 = new HashMap<>();
+        data2.put("key1", "value2");
+        data2.put("key2", 2);
+
+        String expectedJson = "{\n" +
+                "  \"key1\" : \"value2\",\n" +
+                "  \"key2\" : 2\n" +
+                "}";
+        String actualJson = Json.format(data1, data2);
+        assertEquals(expectedJson.trim(), actualJson.trim());
+    }
 }
-
-
