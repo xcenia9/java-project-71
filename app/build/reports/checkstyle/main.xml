@@ -2,6 +2,10 @@
 <checkstyle version="9.3">
 <file name="/home/xcenia/java-project-71/app/src/main/java/hexlet/code/App.java">
 </file>
+<file name="/home/xcenia/java-project-71/app/src/main/java/hexlet/code/utils/Stylish.java">
+</file>
 <file name="/home/xcenia/java-project-71/app/src/main/java/hexlet/code/utils/Differ.java">
+</file>
+<file name="/home/xcenia/java-project-71/app/src/main/java/hexlet/code/utils/Parser.java">
 </file>
 </checkstyle>

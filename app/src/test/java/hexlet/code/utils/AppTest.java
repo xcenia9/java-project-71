@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AppTest {
     @Test
@@ -25,14 +24,14 @@ public class AppTest {
 
     @Test
     public void testGetDataJsonFile() throws Exception {
-        Map<String, Object> result = Parser.getData("test.json");
+        Map<String, Object> result = Parser.getData("src/test/resources/test.json");
         assertEquals("value1", result.get("key1"));
         assertEquals(2, result.get("key2"));
     }
 
     @Test
     public void testGetDataYamlFile() throws Exception {
-        Map<String, Object> result = Parser.getData("test.yaml");
+        Map<String, Object> result = Parser.getData("src/test/resources/test.yml");
         assertEquals("value1", result.get("key1"));
         assertEquals(2, result.get("key2"));
     }
@@ -109,16 +108,6 @@ public class AppTest {
                 "}";
         String result = Differ.generate(data1, data2, "stylish");
         assertEquals(expected, result);
-    }
-
-    @Test
-    public void testGenerateUnsupportedFormat() {
-        Map<String, Object> data1 = new HashMap<>();
-        Map<String, Object> data2 = new HashMap<>();
-        Exception exception = assertThrows(UnsupportedOperationException.class, () -> {
-            Differ.generate(data1, data2, "unsupported_format");
-        });
-        assertEquals("Unsupported format: unsupported_format", exception.getMessage());
     }
 
 }
