@@ -1,147 +1,56 @@
 package hexlet.code.utils;
 
 import hexlet.code.Differ;
-import hexlet.code.formatters.Json;
-import hexlet.code.formatters.Stylish;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import java.util.HashMap;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 import java.util.Map;
+import static hexlet.code.utils.FileReader.getData;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AppTest {
-    @Test
-    public void testParseJson() throws Exception {
-        String jsonContent = "{\"key1\": \"value1\", \"key2\": 2}";
-        Map<String, Object> result = Parser.parse(jsonContent);
-        assertEquals("value1", result.get("key1"));
-        assertEquals(2, result.get("key2"));
+
+    private String readFile(String path) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(path))).trim();
+    }
+
+    private static Map<String, Object> data1;
+    private static Map<String, Object> data2;
+
+    @BeforeAll
+    public static void before() throws Exception {
+        data1 = getData("src/test/resources/introductoryYaml.yml");
+        data2 = getData("src/test/resources/introductoryJson.json");
     }
 
     @Test
-    public void testParseYaml() throws Exception {
-        String yamlContent = "key1: value1\nkey2: 2";
-        Map<String, Object> result = Parser.parse(yamlContent);
-        assertEquals("value1", result.get("key1"));
-        assertEquals(2, result.get("key2"));
-    }
-
-    @Test
-    public void testGetDataJsonFile() throws Exception {
-        Map<String, Object> result = FileReader.getData("src/test/resources/test.json");
-        assertEquals("value1", result.get("key1"));
-        assertEquals(2, result.get("key2"));
-    }
-
-    @Test
-    public void testGetDataYamlFile() throws Exception {
-        Map<String, Object> result = FileReader.getData("src/test/resources/test.yml");
-        assertEquals("value1", result.get("key1"));
-        assertEquals(2, result.get("key2"));
-    }
-
-    @Test
-    public void testFormatDifferentValues() {
-        Map<String, Object> data1 = new HashMap<>();
-        data1.put("key1", "value1");
-        data1.put("key2", 2);
-        Map<String, Object> data2 = new HashMap<>();
-        data2.put("key1", "value2");
-        data2.put("key2", 2);
-        String expected = "{\n" +
-                "- key1: value1\n" +
-                "+ key1: value2\n" +
-                "  key2: 2\n" +
-                "}";
-        String result = Stylish.format(data1, data2);
-        assertEquals(expected, result);
-    }
-
-    @Test
-    public void testFormatSameValues() {
-        Map<String, Object> data1 = new HashMap<>();
-        data1.put("key1", "value1");
-        data1.put("key2", 2);
-        Map<String, Object> data2 = new HashMap<>();
-        data2.put("key1", "value1");
-        data2.put("key2", 2);
-        String expected = "{\n" +
-                "  key1: value1\n" +
-                "  key2: 2\n" +
-                "}";
-        String result = Stylish.format(data1, data2);
-        assertEquals(expected, result);
-    }
-
-    @Test
-    public void testFormatOnlyInFirstMap() {
-        Map<String, Object> data1 = new HashMap<>();
-        data1.put("key1", "value1");
-        Map<String, Object> data2 = new HashMap<>();
-        String expected = "{\n" +
-                "- key1: value1\n" +
-                "}";
-        String result = Stylish.format(data1, data2);
-        assertEquals(expected, result);
-    }
-
-    @Test
-    public void testFormatOnlyInSecondMap() {
-        Map<String, Object> data1 = new HashMap<>();
-        Map<String, Object> data2 = new HashMap<>();
-        data2.put("key2", "value2");
-        String expected = "{\n" +
-                "+ key2: value2\n" +
-                "}";
-        String result = Stylish.format(data1, data2);
-        assertEquals(expected, result);
-    }
-
-    @Test
-    public void testGenerateStylish() {
-        Map<String, Object> data1 = new HashMap<>();
-        data1.put("key1", "value1");
-        data1.put("key2", 2);
-        Map<String, Object> data2 = new HashMap<>();
-        data2.put("key1", "value2");
-        data2.put("key2", 2);
-        String expected = "{\n" +
-                "- key1: value1\n" +
-                "+ key1: value2\n" +
-                "  key2: 2\n" +
-                "}";
+    public void testGenerateStylishFormat() throws IOException {
+        String expectedOutput = readFile("src/test/resources/testStylish.txt");
         String result = Differ.generate(data1, data2, "stylish");
-        assertEquals(expected, result);
+        assertEquals(expectedOutput, result);
     }
 
     @Test
-    public void testPlainFormat() {
-        Map<String, Object> data1 = new HashMap<>();
-        data1.put("key1", "value1");
-        data1.put("key2", 2);
-        Map<String, Object> data2 = new HashMap<>();
-        data2.put("key1", "value2");
-        data2.put("key2", 2);
-        String expected = "Property 'key1' was updated. From value1 to value2\n";
+    public void testGenerateJsonFormat() throws IOException {
+        String expectedOutput = readFile("src/test/resources/testJson.json");
+        String result = Differ.generate(data1, data2, "json");
 
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode expected = mapper.readTree(expectedOutput);
+        JsonNode actualResult = mapper.readTree(result);
+
+        assertEquals(expected, actualResult);
+    }
+
+    @Test
+    public void testGeneratePlainFormat() throws IOException {
+        String expectedOutput = readFile("src/test/resources/testPlain.txt");
         String result = Differ.generate(data1, data2, "plain");
-
-        assertEquals(expected, result);
-    }
-
-    @Test
-    public void testJsonFormatting() {
-        Map<String, Object> data1 = new HashMap<>();
-        data1.put("key1", "value1");
-        data1.put("key2", 2);
-        Map<String, Object> data2 = new HashMap<>();
-        data2.put("key1", "value2");
-        data2.put("key2", 2);
-
-        String expectedJson = "{\n" +
-                "  \"key1\" : \"value2\",\n" +
-                "  \"key2\" : 2\n" +
-                "}";
-        String actualJson = Json.format(data1, data2);
-        assertEquals(expectedJson.trim(), actualJson.trim());
+        assertEquals(expectedOutput, result);
     }
 }

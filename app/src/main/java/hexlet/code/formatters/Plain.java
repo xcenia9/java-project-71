@@ -17,7 +17,7 @@ public class Plain {
             appendPlainFormat(result, key, Optional.ofNullable(data1.get(key)), Optional.ofNullable(data2.get(key)));
         }
 
-        return result.toString();
+        return result.toString().trim();
     }
 
     private static void appendPlainFormat(

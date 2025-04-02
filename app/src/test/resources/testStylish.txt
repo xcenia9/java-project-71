@@ -1,0 +1,5 @@
+{
+  key1: value1
+- nestedKey: {key2=value2, nestedArray=[item1, item2, item3]}
++ nestedKey: {key2=value2, nestedArray=[item1, item2]}
+}
