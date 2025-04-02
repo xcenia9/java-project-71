@@ -7,7 +7,7 @@ build:
 	make -C app build
 
 install:
-	make -C app installDist
+	make -C app install
 
 run-dist:
 	make -C run-dist

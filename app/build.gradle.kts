@@ -5,7 +5,7 @@ plugins {
     application
     jacoco
     id("checkstyle")
-    id("io.freefair.lombok") version "8.12.2"
+    id("io.freefair.lombok") version "8.13.1"
     id("com.github.ben-manes.versions") version "0.52.0"
 }
 
