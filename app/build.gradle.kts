@@ -13,9 +13,7 @@ group = "io.hexlet"
 
 version = "1.0-SNAPSHOT"
 
-application {
-    mainClass.set("hexlet.code.app")
-}
+application { mainClass.set("hexlet.code.App") }
 
 repositories { mavenCentral() }
 
@@ -23,7 +21,7 @@ dependencies {
     implementation("info.picocli:picocli:4.7.6")
     implementation("org.apache.commons:commons-lang3:3.17.0")
     implementation("org.apache.commons:commons-collections4:4.5.0-M3")
-    testImplementation(platform("org.junit:junit-bom:5.9.1"))
+    testImplementation(platform("org.junit:junit-bom:5.9.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.18.3")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.3")
