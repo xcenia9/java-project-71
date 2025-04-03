@@ -14,7 +14,7 @@ group = "io.hexlet"
 version = "1.0-SNAPSHOT"
 
 application {
-    mainClass.set("hexlet.code.App")
+    mainClass.set("hexlet.code.app")
 }
 
 repositories { mavenCentral() }
