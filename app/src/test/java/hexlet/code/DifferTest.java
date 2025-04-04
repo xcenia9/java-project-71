@@ -1,6 +1,5 @@
-package hexlet.code.utils;
+package hexlet.code;
 
-import hexlet.code.Differ;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +12,7 @@ import java.util.Map;
 import static hexlet.code.utils.FileReader.getData;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AppTest {
+public class DifferTest {
 
     private String readFile(String path) throws IOException {
         return new String(Files.readAllBytes(Paths.get(path))).trim();
