@@ -1,14 +1,10 @@
 package hexlet.code;
 
-import hexlet.code.utils.FileReader;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine;
 import picocli.CommandLine.ExitCode;
-import picocli.CommandLine.Model.CommandSpec;
-import picocli.CommandLine.Spec;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 @Command(
@@ -19,9 +15,6 @@ import java.util.concurrent.Callable;
 )
 public class App implements Callable<Integer> {
 
-    @Spec
-    private CommandSpec spec;
-
     @Option(names = { "-h", "--help" }, usageHelp = true, description = "Show this help message and exit")
     private boolean helpRequested = false;
 
@@ -29,29 +22,31 @@ public class App implements Callable<Integer> {
     boolean versionInfoRequested;
 
     @Option(names = {"-f", "--format"}, description = "output format [default: stylish]", defaultValue = "stylish")
-    private String format = "stylish";
+    private String format;
 
     @Parameters(index = "0", arity = "0..1", description = "path to first file")
-    private String filepath1;
+    private String filePath1;
 
     @Parameters(index = "1", arity = "0..1", description = "path to second file")
-    private String filepath2;
+    private String filePath2;
 
     @Override
     public Integer call() {
-        if (filepath1 == null || filepath2 == null) {
-            System.out.println("Hello, World!");
-        } else {
+
+        if (helpRequested) {
+            return ExitCode.OK;
+        }
+        if (versionInfoRequested) {
+            return ExitCode.OK;
+        }
+
             try {
-                Map<String, Object> data1 = FileReader.getData(filepath1);
-                Map<String, Object> data2 = FileReader.getData(filepath2);
-                String diffResult = Differ.generate(data1, data2, format);
+                String diffResult = Differ.generate(filePath1, filePath2, format);
                 System.out.println(diffResult);
             } catch (Exception e) {
                 System.err.println("Error processing files: " + e.getMessage());
                 return ExitCode.SOFTWARE;
             }
-        }
         return ExitCode.OK;
     }
 
