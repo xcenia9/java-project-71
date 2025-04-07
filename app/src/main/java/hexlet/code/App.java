@@ -39,7 +39,9 @@ public class App implements Callable<Integer> {
         if (versionInfoRequested) {
             return ExitCode.OK;
         }
-
+        if (filePath1 == null || filePath2 == null) {
+            System.out.println("Hello, World!");
+        } else {
             try {
                 String diffResult = Differ.generate(filePath1, filePath2, format);
                 System.out.println(diffResult);
@@ -47,7 +49,7 @@ public class App implements Callable<Integer> {
                 System.err.println("Error processing files: " + e.getMessage());
                 return ExitCode.SOFTWARE;
             }
-        return ExitCode.OK;
+        } return ExitCode.OK;
     }
 
     public static void main(String[] args) {

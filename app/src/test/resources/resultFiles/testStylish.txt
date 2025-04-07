@@ -4,6 +4,7 @@
 + chars2: [p, q, r]
 - checked: false
 + checked: true
+- default: null
 + default: value
 - id: 45
 + id: 123

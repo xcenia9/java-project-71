@@ -1,53 +1,66 @@
 package hexlet.code.formatters;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.Optional;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Stylish {
     public static String format(Map<String, Object> data1, Map<String, Object> data2) {
-        Set<String> allKeys = new TreeSet<>(data1.keySet());
-        allKeys.addAll(data2.keySet());
+        List<String> outputList = new ArrayList<>();
+        Map<String, Object> tempData1 = new HashMap<>(data1);
 
-        StringBuilder result = new StringBuilder("{\n");
-        for (var key : allKeys) {
-            appendStringBuilder(result, key, Optional.ofNullable(data1.get(key)), Optional.ofNullable(data2.get(key)));
+        for (String key : data2.keySet()) {
+            if (!tempData1.containsKey(key)) {
+                String parameter = "+ " + key + ": " + formatValue(data2.get(key)) + "\n";
+                outputList.add(parameter);
+            } else {
+                Object value1 = tempData1.get(key);
+                Object value2 = data2.get(key);
+
+                if (!equals(value1, value2)) {
+                    String parameter = "- " + key + ": " + formatValue(value1) + "\n" +
+                            "+ " + key + ": " + formatValue(value2) + "\n";
+                    outputList.add(parameter);
+                }
+                tempData1.remove(key);
+            }
         }
-        result.append("}");
-        return result.toString();
+
+        for (String key : tempData1.keySet()) {
+            String parameter = "- " + key + ": " + formatValue(tempData1.get(key)) + "\n";
+            outputList.add(parameter);
+        }
+
+        for (String key : data1.keySet()) {
+            if (data2.containsKey(key) && equals(data1.get(key), data2.get(key))) {
+                String parameter = "  " + key + ": " + formatValue(data1.get(key)) + "\n";
+                outputList.add(parameter);
+            }
+        }
+
+        outputList.sort((v1, v2) -> CharSequence.compare(v1.replaceAll("[^a-zA-Z0-9]", ""), v2.replaceAll("[^a-zA-Z0-9]", "")));
+
+        return outputList.stream().collect(Collectors.joining("", "{\n", "}"));
     }
 
-    private static void appendStringBuilder(
-            StringBuilder result,
-            String key,
-            Optional<Object> value1,
-            Optional<Object> value2
-    ) {
-        if (value1.isPresent() && value2.isPresent()) {
-            appendBothKeys(result, key, value1.get(), value2.get());
-        } else if (value1.isPresent()) {
-            appendFirstValue(result, key, value1.get());
+    private static boolean equals(Object value1, Object value2) {
+        if (value1 == null && value2 == null) return true;
+        if (value1 == null || value2 == null) return false;
+
+        return value1.equals(value2);
+    }
+
+    private static String formatValue(Object value) {
+        if (value instanceof Map<?, ?>) {
+            return "{" + ((Map<?, ?>) value).entrySet().stream()
+                    .map(entry -> entry.getKey() + "=" + entry.getValue())
+                    .collect(Collectors.joining(", ")) + "}";
+        } else if (value instanceof Iterable<?>) {
+            return value.toString();
         } else {
-            appendSecondValue(result, key, value2.get());
+            return String.valueOf(value);
         }
-    }
-
-    private static void appendBothKeys(StringBuilder result, String key, Object value1, Object value2) {
-        if (!Objects.equals(value1, value2)) {
-            result.append("- ").append(key).append(": ").append(value1).append("\n")
-                    .append("+ ").append(key).append(": ").append(value2).append("\n");
-        } else {
-            result.append("  ").append(key).append(": ").append(value1).append("\n");
-        }
-    }
-
-    private static void appendFirstValue(StringBuilder result, String key, Object value1) {
-        result.append("- ").append(key).append(": ").append(value1).append("\n");
-    }
-
-    private static void appendSecondValue(StringBuilder result, String key, Object value2) {
-        result.append("+ ").append(key).append(": ").append(value2).append("\n");
     }
 }
