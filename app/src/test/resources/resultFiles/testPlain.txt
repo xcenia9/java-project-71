@@ -1,1 +1,8 @@
-Property 'nestedKey' was updated. From [complex value] to [complex value]
+Property 'chars2' was updated. From [complex value] to [complex value]
+Property 'checked' was updated. From false to true
+Property 'default' was added with value: value
+Property 'id' was updated. From 45 to 123
+Property 'numbers2' was updated. From [complex value] to [complex value]
+Property 'obj1' was removed
+Property 'setting1' was added with value: Another value
+Property 'setting2' was added with value: false

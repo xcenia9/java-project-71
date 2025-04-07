@@ -1,0 +1,20 @@
+setting1: Another value
+setting2: false
+key1: value1
+numbers1:
+  - 1
+  - 2
+numbers2:
+  - 5
+  - 80
+id: 123
+default: "value"
+checked: true
+chars1:
+  - a
+  - b
+  - c
+chars2:
+  - p
+  - q
+  - r

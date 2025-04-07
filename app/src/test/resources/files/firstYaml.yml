@@ -1,0 +1,21 @@
+obj1:
+  setting1: Some value
+  setting2: true
+key1: value1
+numbers1:
+  - 1
+  - 2
+numbers2:
+  - 4
+  - 5
+id: 45
+default: null
+checked: false
+chars1:
+  - a
+  - b
+  - c
+chars2:
+  - d
+  - e
+  - f

@@ -1,5 +1,17 @@
 {
+  chars1: [a, b, c]
+- chars2: [d, e, f]
++ chars2: [p, q, r]
+- checked: false
++ checked: true
++ default: value
+- id: 45
++ id: 123
   key1: value1
-- nestedKey: {key2=value2, nestedArray=[item1, item2, item3]}
-+ nestedKey: {key2=value2, nestedArray=[item1, item2]}
+  numbers1: [1, 2]
+- numbers2: [4, 5]
++ numbers2: [5, 80]
+- obj1: {setting1=Some value, setting2=true}
++ setting1: Another value
++ setting2: false
 }
