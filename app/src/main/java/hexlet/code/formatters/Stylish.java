@@ -13,15 +13,15 @@ public class Stylish {
 
         for (String key : data2.keySet()) {
             if (!tempData1.containsKey(key)) {
-                String parameter = "+ " + key + ": " + formatValue(data2.get(key)) + "\n";
+                String parameter = "  + " + key + ": " + formatValue(data2.get(key)) + "\n";
                 outputList.add(parameter);
             } else {
                 Object value1 = tempData1.get(key);
                 Object value2 = data2.get(key);
 
                 if (!equals(value1, value2)) {
-                    String parameter = "- " + key + ": " + formatValue(value1) + "\n" +
-                            "+ " + key + ": " + formatValue(value2) + "\n";
+                    String parameter = "  - " + key + ": " + formatValue(value1) + "\n" +
+                            "  + " + key + ": " + formatValue(value2) + "\n";
                     outputList.add(parameter);
                 }
                 tempData1.remove(key);
@@ -29,13 +29,13 @@ public class Stylish {
         }
 
         for (String key : tempData1.keySet()) {
-            String parameter = "- " + key + ": " + formatValue(tempData1.get(key)) + "\n";
+            String parameter = "  - " + key + ": " + formatValue(tempData1.get(key)) + "\n";
             outputList.add(parameter);
         }
 
         for (String key : data1.keySet()) {
             if (data2.containsKey(key) && equals(data1.get(key), data2.get(key))) {
-                String parameter = "  " + key + ": " + formatValue(data1.get(key)) + "\n";
+                String parameter = "    " + key + ": " + formatValue(data1.get(key)) + "\n";
                 outputList.add(parameter);
             }
         }
