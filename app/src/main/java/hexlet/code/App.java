@@ -49,7 +49,8 @@ public class App implements Callable<Integer> {
                 System.err.println("Error processing files: " + e.getMessage());
                 return ExitCode.SOFTWARE;
             }
-        } return ExitCode.OK;
+        }
+        return ExitCode.OK;
     }
 
     public static void main(String[] args) {

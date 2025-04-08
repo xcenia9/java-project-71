@@ -20,8 +20,8 @@ public class Stylish {
                 Object value2 = data2.get(key);
 
                 if (!equals(value1, value2)) {
-                    String parameter = "  - " + key + ": " + formatValue(value1) + "\n" +
-                            "  + " + key + ": " + formatValue(value2) + "\n";
+                    String parameter = "  - " + key + ": " + formatValue(value1) + "\n"
+                            + "  + " + key + ": " + formatValue(value2) + "\n";
                     outputList.add(parameter);
                 }
                 tempData1.remove(key);
@@ -40,14 +40,18 @@ public class Stylish {
             }
         }
 
-        outputList.sort((v1, v2) -> CharSequence.compare(v1.replaceAll("[^a-zA-Z0-9]", ""), v2.replaceAll("[^a-zA-Z0-9]", "")));
-
+        outputList.sort((v1, v2) -> CharSequence.compare(v1.replaceAll("[^a-zA-Z0-9]", ""),
+                                                                        v2.replaceAll("[^a-zA-Z0-9]", "")));
         return outputList.stream().collect(Collectors.joining("", "{\n", "}"));
     }
 
     private static boolean equals(Object value1, Object value2) {
-        if (value1 == null && value2 == null) return true;
-        if (value1 == null || value2 == null) return false;
+        if (value1 == null && value2 == null) {
+            return true;
+        }
+        if (value1 == null || value2 == null) {
+            return false;
+        }
 
         return value1.equals(value2);
     }

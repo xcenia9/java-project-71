@@ -58,6 +58,6 @@ public class AppTest {
     public void testGeneratePlainFormat() throws Exception {
         String expected = readFile("src/test/resources/resultFiles/testPlain.txt");
         String result = Differ.generate(firstYaml, secondYaml, "plain");
-        assertEquals(expected.replaceAll("\\s+", " ").trim(), result.replaceAll("\\s+", " ").trim());
+        assertEquals(expected.trim().replaceAll("\\s+", " "), result.trim().replaceAll("\\s+", " "));
     }
 }
