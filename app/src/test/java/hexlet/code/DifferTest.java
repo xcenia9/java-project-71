@@ -1,6 +1,6 @@
 package hexlet.code;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,8 +21,8 @@ public class DifferTest {
     private static String firstJson;
     private static String secondJson;
 
-    @BeforeEach
-    public void beforeEach() {
+    @BeforeAll
+    public static void beforeAll() {
         firstYaml = "src/test/resources/files/firstYaml.yml";
         secondYaml = "src/test/resources/files/secondYaml.yml";
         firstJson = "src/test/resources/files/firstJson.json";
