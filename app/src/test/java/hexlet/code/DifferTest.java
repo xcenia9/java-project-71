@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AppTest {
+public class DifferTest {
 
     private String readFile(String path) throws IOException {
         return new String(Files.readAllBytes(Paths.get(path))).trim();
@@ -22,7 +22,7 @@ public class AppTest {
     private static String secondJson;
 
     @BeforeEach
-    public void before() {
+    public void beforeEach() {
         firstYaml = "src/test/resources/files/firstYaml.yml";
         secondYaml = "src/test/resources/files/secondYaml.yml";
         firstJson = "src/test/resources/files/firstJson.json";

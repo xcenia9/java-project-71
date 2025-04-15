@@ -1,5 +1,7 @@
 package hexlet.code;
 
+import lombok.Getter;
+import lombok.Setter;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -13,13 +15,15 @@ import java.util.concurrent.Callable;
         version = "gendiff 1.0",
         description = "Compares two configuration files and shows a difference."
 )
-public class App implements Callable<Integer> {
+public final class App implements Callable<Integer> {
 
     @Option(names = { "-h", "--help" }, usageHelp = true, description = "Show this help message and exit")
     private boolean helpRequested = false;
 
+    @Getter
+    @Setter
     @Option(names = {"-V", "--version"}, versionHelp = true, description = "Print version information and exit")
-    boolean versionInfoRequested;
+    private boolean versionInfoRequested;
 
     @Option(names = {"-f", "--format"}, description = "output format [default: stylish]", defaultValue = "stylish")
     private String format;
@@ -36,7 +40,7 @@ public class App implements Callable<Integer> {
         if (helpRequested) {
             return ExitCode.OK;
         }
-        if (versionInfoRequested) {
+        if (isVersionInfoRequested()) {
             return ExitCode.OK;
         }
         if (filePath1 == null || filePath2 == null) {

@@ -16,10 +16,8 @@ public class Plain {
         List<String> sortedDataKeys = sortKeys(data1, data2);
 
         for (String key : sortedDataKeys) {
-            boolean inData1 = data1.containsKey(key);
-            boolean inData2 = data2.containsKey(key);
 
-            if (inData1 && inData2) {
+            if (data1.containsKey(key) && data2.containsKey(key)) {
                 Object value1 = data1.get(key);
                 Object value2 = data2.get(key);
 
@@ -27,9 +25,9 @@ public class Plain {
                     changes.add("Property '" + key + "' was updated. From "
                             + formatValue(value1) + " to " + formatValue(value2));
                 }
-            } else if (inData1 && !inData2) {
+            } else if (data1.containsKey(key) && !data2.containsKey(key)) {
                 changes.add("Property '" + key + "' was removed");
-            } else if (!inData1 && inData2) {
+            } else if (!data1.containsKey(key) && data2.containsKey(key)) {
                 changes.add("Property '" + key + "' was added with value: " + formatValue(data2.get(key)));
             }
         }
