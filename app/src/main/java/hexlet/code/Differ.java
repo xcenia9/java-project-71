@@ -1,26 +1,55 @@
 package hexlet.code;
 
-import hexlet.code.formatters.Plain;
-import hexlet.code.formatters.Stylish;
-import hexlet.code.formatters.Json;
-import hexlet.code.utils.FileReader;
-
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
+import hexlet.code.formatters.Formatter;
+import hexlet.code.formatters.DiffBuilder;
+
+import static hexlet.code.Parser.parse;
 
 public class Differ {
+    private static final String DEFAULT_FORMAT = "stylish";
+
     public static String generate(String filePath1, String filePath2, String format) throws Exception {
-        Object formatter = Formatter.getFormatter(format);
-        Map<String, Object> data1 = FileReader.getData(filePath1);
-        Map<String, Object> data2 = FileReader.getData(filePath2);
-        return switch (formatter.getClass().getSimpleName()) {
-            case "Stylish" -> Stylish.format(data1, data2);
-            case "Json" -> Json.format(data1, data2);
-            case "Plain" -> Plain.format(data1, data2);
-            default -> "";
-        };
+        Map<String, Object> map1 = fileToMap(filePath1);
+        Map<String, Object> map2 = fileToMap(filePath2);
+        List<Map<String, Object>> result = DiffBuilder.buildDifference(map1, map2);
+        return Formatter.format(format, result);
     }
 
     public static String generate(String filePath1, String filePath2) throws Exception {
-        return generate(filePath1, filePath2, "stylish");
+        return generate(filePath1, filePath2, DEFAULT_FORMAT);
+    }
+
+    public static Map<String, Object> fileToMap(String filePath) throws Exception {
+        Path file = Paths.get(filePath);
+        String format = getFormat(filePath);
+
+        if (Files.exists(file)) {
+            String content = Files.readString(file);
+            return parse(content, format);
+        }
+
+        var resourceStream = Differ.class.getClassLoader().getResourceAsStream("files/" + filePath);
+        if (resourceStream != null) {
+            String content = new String(resourceStream.readAllBytes());
+            return parse(content, format);
+        }
+
+        throw new Exception("File '" + filePath + "' not found in file system or resources");
+    }
+
+
+    private static String getFormat(String filePath) {
+        if (filePath.endsWith(".json")) {
+            return "json";
+        } else if (filePath.endsWith(".yml") || filePath.endsWith(".yaml")) {
+            return "yml";
+        } else {
+            return "";
+        }
     }
 }

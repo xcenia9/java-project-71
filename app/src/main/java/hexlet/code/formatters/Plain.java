@@ -1,58 +1,40 @@
+
 package hexlet.code.formatters;
 
 import java.util.Map;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 public class Plain {
-    public static String format(Map<String, Object> data1, Map<String, Object> data2) {
-        List<String> changes = new ArrayList<>();
+    public static final String REMOVED_LINE_FORMAT = "Property '%s' was removed\n";
+    public static final String ADD_LINE_FORMAT = "Property '%s' was added with value: %s\n";
+    public static final String UPDATED_LINE_FORMAT = "Property '%s' was updated. From %s to %s\n";
 
-        List<String> sortedDataKeys = sortKeys(data1, data2);
+    public static String formatPlain(List<Map<String, Object>> diff) {
 
-        for (String key : sortedDataKeys) {
 
-            if (data1.containsKey(key) && data2.containsKey(key)) {
-                Object value1 = data1.get(key);
-                Object value2 = data2.get(key);
-
-                if (!Objects.equals(value1, value2)) {
-                    changes.add("Property '" + key + "' was updated. From "
-                            + formatValue(value1) + " to " + formatValue(value2));
-                }
-            } else if (data1.containsKey(key) && !data2.containsKey(key)) {
-                changes.add("Property '" + key + "' was removed");
-            } else if (!data1.containsKey(key) && data2.containsKey(key)) {
-                changes.add("Property '" + key + "' was added with value: " + formatValue(data2.get(key)));
-            }
+        StringBuilder result = new StringBuilder();
+        for (Map<String, Object> diffLine : diff) {
+            var fieldStatus = (String) diffLine.get("STATUS");
+            var fieldName = (String) diffLine.get("FIELD");
+            var oldFieldValue = diffLine.get("OLD_VALUE");
+            var newFieldValue = diffLine.get("NEW_VALUE");
+            result.append(
+                switch (fieldStatus) {
+                    case "REMOVED" -> REMOVED_LINE_FORMAT.formatted(fieldName);
+                    case "ADDED" -> ADD_LINE_FORMAT.formatted(fieldName, getValue(newFieldValue));
+                    case "UPDATED" -> UPDATED_LINE_FORMAT.formatted(fieldName,
+                         getValue(oldFieldValue), getValue(newFieldValue));
+                    case "SAME" -> "";
+                    default -> ""; });
         }
-
-        return String.join("\n", changes);
+        return result.deleteCharAt(result.length() - 1).toString();
     }
-
-    private static List<String> sortKeys(Map<String, Object> data1, Map<String, Object> data2) {
-        Set<String> mergedKeys = new HashSet<>(data1.keySet());
-        mergedKeys.addAll(data2.keySet());
-
-        return mergedKeys.stream()
-                .sorted()
-                .collect(Collectors.toList());
-    }
-
-    private static String formatValue(Object value) {
-        if (value == null) {
-            return "null";
-        } else if (value instanceof Collection || value instanceof Map) {
+    private static String getValue(Object obj) {
+        if (obj instanceof String) {
+            return "'" + obj + "'";
+        } else if (obj instanceof List || obj instanceof Map) {
             return "[complex value]";
-        } else if (value instanceof String) {
-            return "'" + value + "'";
-        } else {
-            return String.valueOf(value);
         }
+        return String.valueOf(obj).trim();
     }
 }

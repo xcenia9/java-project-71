@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.JsonNode;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -47,17 +46,13 @@ public class DifferTest {
         String expectedJson = readFile("src/test/resources/resultFiles/testJson.json");
         String result = Differ.generate(firstJson, secondJson, "json");
 
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode expected = mapper.readTree(expectedJson);
-        JsonNode actualResult = mapper.readTree(result);
-
-        assertEquals(expected, actualResult);
+        assertEquals(expectedJson, result);
     }
 
     @Test
     public void testGeneratePlainFormat() throws Exception {
         String expected = readFile("src/test/resources/resultFiles/testPlain.txt");
         String result = Differ.generate(firstYaml, secondYaml, "plain");
-        assertEquals(expected.replaceAll("\\s+", "<space>"), result.replaceAll("\\s+", "<space>"));
+        assertThat(expected).isEqualTo(result);
     }
 }
