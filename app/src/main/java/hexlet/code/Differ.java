@@ -25,6 +25,9 @@ public class Differ {
     }
 
     public static Map<String, Object> fileToMap(String filePath) throws Exception {
+        if (filePath == null || filePath.trim().isEmpty()) {
+            throw new IllegalArgumentException("File path must be provided");
+        }
         Path file = Paths.get(filePath);
         String format = getFormat(filePath);
 
@@ -44,12 +47,11 @@ public class Differ {
 
 
     private static String getFormat(String filePath) {
-        if (filePath.endsWith(".json")) {
-            return "json";
-        } else if (filePath.endsWith(".yml") || filePath.endsWith(".yaml")) {
-            return "yml";
-        } else {
+        String lowerCasePath = filePath.toLowerCase();
+        int lastDotIndex = lowerCasePath.lastIndexOf('.');
+        if (lastDotIndex == -1 || lastDotIndex == lowerCasePath.length() - 1) {
             return "";
         }
+        return lowerCasePath.substring(lastDotIndex + 1);
     }
 }

@@ -43,17 +43,14 @@ public final class App implements Callable<Integer> {
         if (isVersionInfoRequested()) {
             return ExitCode.OK;
         }
-        if (filePath1 == null || filePath2 == null) {
-            System.out.println("Hello, World!");
-        } else {
-            try {
-                String diffResult = Differ.generate(filePath1, filePath2, format);
-                System.out.println(diffResult);
-            } catch (Exception e) {
-                System.err.println("Error processing files: " + e.getMessage());
-                return ExitCode.SOFTWARE;
-            }
+        try {
+            String diffResult = Differ.generate(filePath1, filePath2, format);
+            System.out.println(diffResult);
+        } catch (Exception e) {
+            System.err.println("Error processing files: " + e.getMessage());
+            return ExitCode.SOFTWARE;
         }
+
         return ExitCode.OK;
     }
 

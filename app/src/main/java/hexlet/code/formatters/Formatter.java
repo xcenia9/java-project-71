@@ -11,7 +11,7 @@ public class Formatter {
             case "json" -> Json.formatJson(result);
             case "plain" -> Plain.formatPlain(result);
             case "stylish" -> Stylish.formatStylish(result);
-            default -> "Format error";
+            default -> throw new IllegalArgumentException("Unknown format: " + format);
         };
     }
 }
