@@ -30,8 +30,11 @@ public class DifferTest {
     @Test
     public void fileNotFound() {
         String notTheRightPath = "src/test/resources/files/non-existentFile.txt";
-        assertThrows(IOException.class, () -> {readFile(notTheRightPath);});
+        assertThrows(IOException.class, () -> {
+            readFile(notTheRightPath);
+        });
     }
+
     @Test
     public void testGenerateDefaultFormat() throws Exception {
         String expected = readFile("src/test/resources/expectedResultFiles/resultStylish.txt");
