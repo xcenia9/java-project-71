@@ -1,13 +1,15 @@
 package hexlet.code;
 
+import hexlet.code.formatters.Formatter;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import hexlet.code.formatters.Formatter;
-import hexlet.code.formatters.DiffBuilder;
 
+
+import static hexlet.code.DiffBuilder.buildDifference;
 import static hexlet.code.Parser.parse;
 
 public class Differ {
@@ -16,7 +18,7 @@ public class Differ {
     public static String generate(String filePath1, String filePath2, String format) throws Exception {
         Map<String, Object> map1 = fileToMap(filePath1);
         Map<String, Object> map2 = fileToMap(filePath2);
-        List<Map<String, Object>> result = DiffBuilder.buildDifference(map1, map2);
+        List<Map<String, Object>> result = buildDifference(map1, map2);
         return Formatter.format(format, result);
     }
 
@@ -28,21 +30,15 @@ public class Differ {
         if (filePath == null || filePath.trim().isEmpty()) {
             throw new IllegalArgumentException("File path must be provided");
         }
+
         Path file = Paths.get(filePath);
+        if (!Files.exists(file)) {
+            throw new Exception("File '" + filePath + "' not found");
+        }
+
+        String content = Files.readString(file);
         String format = getFormat(filePath);
-
-        if (Files.exists(file)) {
-            String content = Files.readString(file);
-            return parse(content, format);
-        }
-
-        var resourceStream = Differ.class.getClassLoader().getResourceAsStream("files/" + filePath);
-        if (resourceStream != null) {
-            String content = new String(resourceStream.readAllBytes());
-            return parse(content, format);
-        }
-
-        throw new Exception("File '" + filePath + "' not found in file system or resources");
+        return parse(content, format);
     }
 
 
